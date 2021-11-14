@@ -1,0 +1,47 @@
+HADOOP_HOME=E:\notes\Hadoop\winutils
+JAVA_HOME=C:\Program Files\Java\jdk-11.0.9
+KAFKA_HOME=E:\softwares\java\kafka\confluent\bin\windows
+PYSPARK_PYTHON=C:\Users\Anand\AppData\Local\Programs\Python\Python36-32
+PYTHONPATH=E:\notes\Hadoop\spark\spark312\python;E:\notes\Hadoop\spark\spark312\python\lib\py4j-0.10.9-src
+SPARK_HOME=E:\notes\Hadoop\spark\spark312
+
+--------
+
+E:\softwares\java\kafka\kafka213> zookeeper-server-start.bat .\config\zookeeper.properties
+E:\softwares\java\kafka\kafka213> kafka-server-start.bat .\config\server.properties
+E:\notes\Hadoop\kafka\kafka213> kafka-console-producer.bat --topic quickstart-events --broker-list localhost:9092
+C:\Windows\system32> kafka-console-consumer.bat --topic quickstart-events --from-beginning --bootstrap-server localhost:9092
+
+
+Install nmap from https://nmap.org/download.html
+
+ncat -lk 9999
+
+Spark UI:
+http://localhost:4040/jobs/
+
+==========
+
+statefull vs stateless transformations:
+
+stateless: select, filter, map, flatmap, explode() etc
+statefull: all aggregate functions viz. grouping, aggregations, windowing and joins
+
+concept of state store:
+
+stateful: excessive state causes out of memory
+		  1. unbounded state
+		  2. time bound state
+
+stateful xformations are of 2 types:
+1. Managed stateful xformations
+2. Unmanaged stateful xformations
+
+Aggregations are of 2 types:
+1. continuous agg.
+2. time bound agg.
+
+windowing aggregates are of 2 types:
+
+1. tumbling time window
+2. sliding time window

@@ -1,0 +1,3 @@
+[debug] "not up to date. inChanged = true, force = false
+[debug] Updating ProjectRef(uri("file:/D:/Users/Anand/spark_projects/git/Spark-Streaming-In-Scala/06-KafkaAvroSinkDemo/project/"), "root-06-kafkaavrosinkdemo-build")...
+[debug] Done updating ProjectRef(uri("file:/D:/Users/Anand/spark_projects/git/Spark-Streaming-In-Scala/06-KafkaAvroSinkDemo/project/"), "root-06-kafkaavrosinkdemo-build")

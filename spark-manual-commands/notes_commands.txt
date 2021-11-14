@@ -1,0 +1,123 @@
+spark-shell
+
+val df1 = spark.read.option("header","true").option("inferSchema","true").csv("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events.csv")
+ 
+val df2 = df1.filter("Age > 25")
+ 
+df2.show()
+ 
+val df3 = df1.groupBy("Sport").count()
+
+df3.write.json("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events_output.json")
+
+---------
+
+val df1 = spark.read.option("header","true").option("inferSchema","true").csv("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events.csv")
+
+val df2 = df1.filter("Age > 25").groupBy("Sport").count().write.json("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events_output.json")
+
+groupBy() - it will create more than 200 tasks as the param value 
+spark.sql.shuffle.partitions = 200 by default
+
+so exit from spark-shell
+
+----------
+
+spark-shell --conf spark.sql.shuffle.partitions=3
+
+val df1 = spark.read.option("header","true").option("inferSchema","true").csv("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events.csv")
+
+val df2 = df1.filter("Age > 25").groupBy("Sport").count().write.json("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events_output.json")
+
+
+in the output directory, only 3 output files are created.
+
+scala> df1.explain(true)
+== Parsed Logical Plan ==
+Relation[ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] csv
+
+== Analyzed Logical Plan ==
+ID: int, Name: string, Sex: string, Age: string, Height: string, Weight: string, Team: string, NOC: string, Games: string, Year: string, Season: string, City: string, Sport: string, Event: string, Medal: string
+Relation[ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] csv
+
+== Optimized Logical Plan ==
+Relation[ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] csv
+
+== Physical Plan ==
+FileScan csv [ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex[file:/D:/Users/Anand/spark_projects/git/spark-olympics/athlete_events.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<ID:int,Name:string,Sex:string,Age:string,Height:string,Weight:string,Team:string,NOC:strin...
+
+
+
+-----------------
+
+val p = spark.read.option("header","true").option("inferSchema","true").csv("athlete_events.csv")
+
+scala> p.printSchema()
+root
+ |-- ID: integer (nullable = true)
+ |-- Name: string (nullable = true)
+ |-- Sex: string (nullable = true)
+ |-- Age: string (nullable = true)
+ |-- Height: string (nullable = true)
+ |-- Weight: string (nullable = true)
+ |-- Team: string (nullable = true)
+ |-- NOC: string (nullable = true)
+ |-- Games: string (nullable = true)
+ |-- Year: string (nullable = true)
+ |-- Season: string (nullable = true)
+ |-- City: string (nullable = true)
+ |-- Sport: string (nullable = true)
+ |-- Event: string (nullable = true)
+ |-- Medal: string (nullable = true)
+ 
+ 
+-------------------
+
+scala> import org.apache.spark.sql.types._
+import org.apache.spark.sql.types._
+
+scala> val custSchema = StructType(StructField("emp_id", IntegerType, true)::StructField("emp_name", StringType, true)::StructField("emp_email", StringType, true)::Nil)
+custSchema: org.apache.spark.sql.types.StructType = StructType(StructField(emp_id,IntegerType,true), StructField(emp_name,StringType,true), StructField(emp_email,StringType,true))
+
+scala> custSchema
+res9: org.apache.spark.sql.types.StructType = StructType(StructField(emp_id,IntegerType,true), StructField(emp_name,StringType,true), StructField(emp_email,StringType,true))
+
+scala> val custDF = spark.read.option("header","true").schema(custSchema).csv("D://Users//Anand//spark_projects//git//spark-manual-commands//customers.csv")
+custDF: org.apache.spark.sql.DataFrame = [emp_id: int, emp_name: string ... 1 more field]
+
+scala> custDF.printSchema
+root
+ |-- emp_id: integer (nullable = true)
+ |-- emp_name: string (nullable = true)
+ |-- emp_email: string (nullable = true)
+
+scala> custDF.show()
+21/11/02 01:39:59 WARN CSVHeaderChecker: CSV header does not conform to the schema.
+ Header: id, name, email
+ Schema: emp_id, emp_name, emp_email
+Expected: emp_id but found: id
+CSV file: file:///D:/Users/Anand/spark_projects/git/spark-manual-commands/customers.csv
++------+--------+------------+
+|emp_id|emp_name|   emp_email|
++------+--------+------------+
+|     1|   anand| a@gmail.com|
+|     2|   guddi| b@gmail.com|
+|     3|   mumma| c@gmail.com|
++------+--------+------------+
+
+scala> custDF.write.option("compression","gzip").mode("overwrite").csv("D://Users//Anand//spark_projects//git//spark-man
+ual-commands//output//customercsv")
+21/11/02 01:45:18 WARN ZlibFactory: Failed to load/initialize native-zlib library
+21/11/02 01:45:18 WARN CSVHeaderChecker: CSV header does not conform to the schema.
+ Header: id, name, email
+ Schema: emp_id, emp_name, emp_email
+Expected: emp_id but found: id
+CSV file: file:///D:/Users/Anand/spark_projects/git/spark-manual-commands/customers.csv
+
+-----------------
+
+scala> val avroDF = spark.read.format("avro").load("D://Users//Anand//spark_projects//git//spark-manual-commands//episod
+es.avro")
+avroDF: org.apache.spark.sql.DataFrame = [title: string, air_date: string ... 1 more field]
+
+avroDF.select("title","air_date").filter("doctor == 11").write.format("avro").save("D://Users//Anand//spark_projects//git//spark-manual-commands//output//episodeavro")

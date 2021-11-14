@@ -1,0 +1,72 @@
+spark-shell
+
+val df1 = spark.read.option("header","true").option("inferSchema","true").csv("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events.csv")
+ 
+val df2 = df1.filter("Age > 25")
+ 
+df2.show()
+ 
+val df3 = df1.groupBy("Sport").count()
+
+df3.write.json("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events_output.json")
+
+---------
+
+val df1 = spark.read.option("header","true").option("inferSchema","true").csv("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events.csv")
+
+val df2 = df1.filter("Age > 25").groupBy("Sport").count().write.json("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events_output.json")
+
+groupBy() - it will create more than 200 tasks as the param value 
+spark.sql.shuffle.partitions = 200 by default
+
+so exit from spark-shell
+
+----------
+
+spark-shell --conf spark.sql.shuffle.partitions=3
+
+val df1 = spark.read.option("header","true").option("inferSchema","true").csv("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events.csv")
+
+val df2 = df1.filter("Age > 25").groupBy("Sport").count().write.json("D://Users//Anand//spark_projects//git//spark-olympics//athlete_events_output.json")
+
+
+in the output directory, only 3 output files are created.
+
+scala> df1.explain(true)
+== Parsed Logical Plan ==
+Relation[ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] csv
+
+== Analyzed Logical Plan ==
+ID: int, Name: string, Sex: string, Age: string, Height: string, Weight: string, Team: string, NOC: string, Games: string, Year: string, Season: string, City: string, Sport: string, Event: string, Medal: string
+Relation[ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] csv
+
+== Optimized Logical Plan ==
+Relation[ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] csv
+
+== Physical Plan ==
+FileScan csv [ID#16,Name#17,Sex#18,Age#19,Height#20,Weight#21,Team#22,NOC#23,Games#24,Year#25,Season#26,City#27,Sport#28,Event#29,Medal#30] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex[file:/D:/Users/Anand/spark_projects/git/spark-olympics/athlete_events.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct<ID:int,Name:string,Sex:string,Age:string,Height:string,Weight:string,Team:string,NOC:strin...
+
+
+
+-----------------
+
+val p = spark.read.option("header","true").option("inferSchema","true").csv("athlete_events.csv")
+
+scala> p.printSchema()
+root
+ |-- ID: integer (nullable = true)
+ |-- Name: string (nullable = true)
+ |-- Sex: string (nullable = true)
+ |-- Age: string (nullable = true)
+ |-- Height: string (nullable = true)
+ |-- Weight: string (nullable = true)
+ |-- Team: string (nullable = true)
+ |-- NOC: string (nullable = true)
+ |-- Games: string (nullable = true)
+ |-- Year: string (nullable = true)
+ |-- Season: string (nullable = true)
+ |-- City: string (nullable = true)
+ |-- Sport: string (nullable = true)
+ |-- Event: string (nullable = true)
+ |-- Medal: string (nullable = true)
+

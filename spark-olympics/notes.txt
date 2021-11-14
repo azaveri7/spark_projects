@@ -1,0 +1,17 @@
+Notebook:
+
+Collection of runnable cells (commands). When you use a notebook, you are primarily developing
+& running cells.
+
+Supported:
+
+%scala
+%python
+%r
+%sql
+
+Additionally,
+
+%sh - to allow shell commands to be executed in NB.
+%fs - to allow to use dbutils filesystem commands.
+%md - allows to include various type of documentation, including text, images, mathematical formulas and equations

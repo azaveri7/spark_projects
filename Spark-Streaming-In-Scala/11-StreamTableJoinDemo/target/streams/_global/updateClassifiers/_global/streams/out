@@ -1,0 +1,4 @@
+[debug] "not up to date. inChanged = true, force = false
+[debug] Updating ProjectRef(uri("file:/D:/Users/Anand/spark_projects/git/Spark-Streaming-In-Scala/11-StreamTableJoinDemo/"), "root-11-streamtablejoindemo")...
+[debug] Done updating ProjectRef(uri("file:/D:/Users/Anand/spark_projects/git/Spark-Streaming-In-Scala/11-StreamTableJoinDemo/"), "root-11-streamtablejoindemo")
+[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.

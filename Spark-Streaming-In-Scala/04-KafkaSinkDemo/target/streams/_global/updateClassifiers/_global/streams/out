@@ -1,0 +1,4 @@
+[debug] "not up to date. inChanged = true, force = false
+[debug] Updating ProjectRef(uri("file:/D:/Users/Anand/spark_projects/git/Spark-Streaming-In-Scala/04-KafkaSinkDemo/"), "root-04-kafkasinkdemo")...
+[debug] Done updating ProjectRef(uri("file:/D:/Users/Anand/spark_projects/git/Spark-Streaming-In-Scala/04-KafkaSinkDemo/"), "root-04-kafkasinkdemo")
+[warn] There may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.
